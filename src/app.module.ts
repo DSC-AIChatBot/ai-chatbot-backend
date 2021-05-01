@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { EmotionCalendarModule } from './emotion-calendar/emotion-calendar.module';
+import { ApiTestModule } from './api-test/api-test.module';
 
 @Module({
-  imports: [AuthModule, EmotionCalendarModule],
+  imports: [AuthModule, EmotionCalendarModule, ApiTestModule],
   controllers: [AppController],
   providers: [AppService],
 })
