@@ -1,4 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller('api-test')
-export class ApiTestController {}
+export class ApiTestController {
+  @Get()
+  findAll(): string {
+    return 'api-test success';
+  }
+}
