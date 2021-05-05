@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -6,7 +8,9 @@ import { EmotionCalendarModule } from './emotion-calendar/emotion-calendar.modul
 import { ApiTestModule } from './api-test/api-test.module';
 
 @Module({
-  imports: [AuthModule, EmotionCalendarModule, ApiTestModule],
+  imports: [
+    TypeOrmModule.forRoot(),
+    AuthModule, EmotionCalendarModule, ApiTestModule],
   controllers: [AppController],
   providers: [AppService],
 })

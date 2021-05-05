@@ -1,4 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpService } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
+import { UserEntity } from './entities/user.entity';
 @Injectable()
-export class AuthService {}
+export class AuthService {
+  constructor(
+    private readonly http: HttpService,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ){}
+}
