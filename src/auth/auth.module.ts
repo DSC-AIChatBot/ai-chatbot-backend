@@ -5,9 +5,10 @@ import { AuthService } from './auth.service';
 
 import { UserEntity } from './entities/user.entity';
 
+import { GoogleStrategy } from './passport/google.strategy';
 @Module({
-  imports : [TypeOrmModule.forFeature([UserEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, GoogleStrategy],
 })
 export class AuthModule {}

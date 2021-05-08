@@ -27,13 +27,13 @@ export class UserEntity {
 
   @Column()
   email: string;
-  
+
   @Column()
   gender: string;
 
   @Column()
   age: string;
-  
+
   @Column()
   emotional_calendar: [Object];
 }
