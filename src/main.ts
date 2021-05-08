@@ -17,6 +17,12 @@ async function bootstrap() {
   //  * cors error handler
   //  * 개발 환경 whitelist cors polcy 를 허용한다.
   //  */
+  // const whitelist = ['http://localhost:3000'];
+
+  /**
+   * cors error handler
+   * 개발 환경 whitelist cors policy 를 허용한다.
+   */
   // app.enableCors({
   //   origin: function (origin, callback) {
   //     if (whitelist.indexOf(origin) !== -1) {
