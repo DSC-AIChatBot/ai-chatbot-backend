@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/models/auth/auth.module';
 import { AuthService } from 'src/models/auth/auth.service';
-import { MysqlDatabaseProviderModule } from 'src/providers/database/mysql/provider.module';
+import { GCPMysqlDatabaseProviderModule } from 'src/providers/database/mysql-dev/provider.module';
 import { Seeder } from './seeder';
 
 /**
@@ -11,7 +11,7 @@ import { Seeder } from './seeder';
  * @module
  */
 @Module({
-  imports: [MysqlDatabaseProviderModule, AuthModule],
+  imports: [GCPMysqlDatabaseProviderModule, AuthModule],
   providers: [AuthService, Logger, Seeder],
 })
 export class SeederModule {}

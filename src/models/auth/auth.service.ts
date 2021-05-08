@@ -4,11 +4,9 @@ import { Repository } from 'typeorm';
 
 import { UserEntity } from './entities/user.entity';
 @Injectable()
-export class AuthService { 
+export class AuthService {
   constructor(
-    private readonly http: HttpService,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly http: HttpService, // @InjectRepository(UserEntity) // private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   googleLogin(req: any) {
@@ -21,13 +19,13 @@ export class AuthService {
     };
   }
 
-  naverLogin(req){
-    if (!req.user){
-        return 'No user from naver';
+  naverLogin(req) {
+    if (!req.user) {
+      return 'No user from naver';
     }
     return {
-        message : 'SUCCESS LOGIN!!!! User information from naver',
-        user: req.user,
-    }
-}
+      message: 'SUCCESS LOGIN!!!! User information from naver',
+      user: req.user,
+    };
+  }
 }

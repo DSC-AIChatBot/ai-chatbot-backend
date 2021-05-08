@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn } from '@nestjs/typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 export interface KakaoUser {
   id: string;
@@ -8,7 +8,7 @@ export interface KakaoUser {
   gender: string;
   age: number;
   accountType: 'kakao' | 'naver' | 'google'; //DB 따라서 설정
-  emotion_calendar: [Object];
+  emotion_calendar: [any];
   //refreshToken: string;
 }
 @Entity('user')
@@ -35,5 +35,5 @@ export class UserEntity {
   age: string;
 
   @Column()
-  emotional_calendar: [Object];
+  emotional_calendar: [any];
 }

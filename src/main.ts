@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AppConfigService } from './config/app/configuration.service';
 
 const PORT = 5000;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{cors:true});
+  const app = await NestFactory.create(AppModule, { cors: true });
+  const appConfig: AppConfigService = app.get('AppConfigService');
 
   /**
    * cors 허용 whitelist
@@ -37,6 +39,6 @@ async function bootstrap() {
   //   credentials: true,
   // });
 
-  await app.listen(PORT);
+  await app.listen(appConfig.port);
 }
 bootstrap();
