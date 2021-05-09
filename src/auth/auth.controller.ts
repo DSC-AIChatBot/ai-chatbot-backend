@@ -1,4 +1,18 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService} from './auth.service';
 
 @Controller('auth')
-export class AuthController {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+  /*passport test code*/
+  @Get('login/kakao')
+  @UseGuards(AuthGuard('kakao'))
+  async kakaoAuth(@Req() req) {}
+
+  @Get('login/naver/callback')
+  @UseGuards(AuthGuard('kakao'))
+  kakaoLoginCallback(@Req() req) {
+    return this.authService.kakaoLogin(req)
+  }
+}

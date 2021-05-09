@@ -9,7 +9,6 @@ import { ApiTestModule } from './api-test/api-test.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
     AuthModule, EmotionCalendarModule, ApiTestModule],
   controllers: [AppController],
   providers: [AppService],

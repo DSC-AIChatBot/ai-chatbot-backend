@@ -10,4 +10,14 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ){}
+
+  kakaoLogin(req){
+    if(!req.user){
+      return 'no user from kakao';
+    }
+    return {
+      message : "Success, User info from kakao",
+      user : req.user,
+  }
+  }
 }

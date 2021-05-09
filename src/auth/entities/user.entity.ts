@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn } from '@nestjs/typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 export interface KakaoUser {
   id: string;
