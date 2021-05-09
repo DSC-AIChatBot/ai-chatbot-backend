@@ -9,7 +9,8 @@ import { ApiTestModule } from './api-test/api-test.module';
 
 @Module({
   imports: [
-    AuthModule, EmotionCalendarModule, ApiTestModule],
+    AuthModule, EmotionCalendarModule, ApiTestModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

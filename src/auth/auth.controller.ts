@@ -10,7 +10,7 @@ export class AuthController {
   @UseGuards(AuthGuard('kakao'))
   async kakaoAuth(@Req() req) {}
 
-  @Get('login/naver/callback')
+  @Get('login/kakao/callback')
   @UseGuards(AuthGuard('kakao'))
   kakaoLoginCallback(@Req() req) {
     return this.authService.kakaoLogin(req)

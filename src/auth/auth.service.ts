@@ -5,11 +5,11 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly http: HttpService,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-  ){}
+  // constructor(
+  //   //private readonly http: HttpService,
+  //   @InjectRepository(UserEntity)
+  //   private readonly userRepository: Repository<UserEntity>,
+  // ){}
 
   kakaoLogin(req){
     if(!req.user){
