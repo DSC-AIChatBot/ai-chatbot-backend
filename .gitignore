@@ -35,3 +35,4 @@ lerna-debug.log*
 
 # .env
 # .env.dev 개발 기간 동안 push 허용
+.env.product
