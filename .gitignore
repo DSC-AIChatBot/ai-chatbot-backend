@@ -34,4 +34,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # .env
-.env.dev
+# .env.dev 개발 기간 동안 push 허용
