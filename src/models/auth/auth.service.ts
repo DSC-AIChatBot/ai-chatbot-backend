@@ -5,6 +5,7 @@ import { UserEntity } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, FilterQuery } from 'mongoose'
 import { User } from 'src/providers/database/mongo/auth.model';
+import { LoginUserDTO } from './dto/login.dto'
 
 @Injectable()
 export class AuthService {
@@ -26,10 +27,7 @@ export class AuthService {
       return 'No user from naver';
     }
     console.log(req);
-    return {
-      message: 'SUCCESS LOGIN!!!! User information from naver',
-      user: req.user,
-    };
+    return this.create(req.user)
   }
 
   //아래는 몽고 db 관련 메소드라 추후에 모듈화 할 것이다
