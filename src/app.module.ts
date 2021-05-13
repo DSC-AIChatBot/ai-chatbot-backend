@@ -6,6 +6,7 @@ import { AuthModule } from './models/auth/auth.module';
 import { EmotionCalendarModule } from './models/emotion-calendar/emotion-calendar.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppConfigModule } from './config/app/configuration.module';
+import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
@@ -16,6 +17,9 @@ import { AppConfigModule } from './config/app/configuration.module';
       envFilePath: '.env.dev',
       isGlobal: true,
     }),
+    MongooseModule.forRoot(
+      'mongodb+srv://dscchatbot:dscchatbot1234@cluster0.6zung.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    )
   ],
   controllers: [AppController],
   providers: [AppService],
