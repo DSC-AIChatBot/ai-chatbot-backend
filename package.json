@@ -25,6 +25,13 @@
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.6.15",
+<<<<<<< HEAD
+    "@nestjs/passport": "7.1.5",
+    "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/typeorm": "7.1.5",
+    "passport": "0.4.1",
+    "passport-kakao": "1.0.1",
+=======
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/passport": "^7.1.5",
@@ -37,6 +44,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "passport-naver": "^1.0.6",
+>>>>>>> 4d04e4d13c40b8d70edf88924762a1e0ef1ee237
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
