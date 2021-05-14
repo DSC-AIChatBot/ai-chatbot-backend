@@ -18,6 +18,6 @@ export class AuthService {
     return {
       message : "Success, User info from kakao",
       user : req.user,
-  }
+    }
   }
 }
