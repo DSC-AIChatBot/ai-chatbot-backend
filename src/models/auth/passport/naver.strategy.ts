@@ -21,10 +21,21 @@ export class NaverStartegy extends PassportStrategy(Strategy, 'naver'){
         profile:Profile, 
         done:(error: any, user?: any, info?: any) => void
     ):Promise<any>{
-        console.log(profile)
         const _profile = profile._json;
+        console.log(_profile)
         const user = {
             id : _profile.id,
+            pw : " ",
+            // email관련해 네아로 api 요청받을때 체크하지 않아서
+            // 추후에 체크했는데 아직 리프레시 토큰이 살아서 
+            // 계속 로그인 이후 정보를 제대로 받지 못함 
+            // 그래서 우선 주석 처리함
+            // email : _profile.email,
+            email : "jawoon@dsc.com",
+            age : _profile.age,
+            accountType : 'Naver',
+            nickName : " ",
+            gender : " "
         }
         
         done(null,user);

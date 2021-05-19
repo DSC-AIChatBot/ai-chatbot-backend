@@ -29,4 +29,6 @@ export class MongoService{
     async findAll<T extends Document>(MongoSchema:Model<T>): Promise<T[]> {
         return MongoSchema.find().exec();
     }
+
+
 }
