@@ -3,18 +3,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { NaverStartegy } from './passport/naver.strategy';
-import { UserEntity } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { GoogleStrategy } from './passport/google.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from 'src/providers/database/mongo/auth.model';
 
 @Module({
   imports: [
-    // TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([User]),
     HttpModule,
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema}])
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])
   ],
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy, NaverStartegy],
 })
-export class AuthModule {}
+export class AuthModule { }

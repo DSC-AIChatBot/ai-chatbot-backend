@@ -1,39 +1,42 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { EmotionCalendar } from 'src/models/emotion-calendar/entities/emotionCalendar.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-export interface KakaoUser {
-  id: string;
-  pw: string;
-  nickName: string;
-  email: string;
-  gender: string;
-  age: number;
-  accountType: 'kakao' | 'naver' | 'google'; //DB 따라서 설정
-  emotion_calendar: [any];
-  //refreshToken: string;
-}
-@Entity('user')
-export class UserEntity {
-  @PrimaryColumn()
+@ObjectType()
+@Entity()
+export class User {
+  @Field(() => Int)
+  @PrimaryGeneratedColumn()
   id: number;
-  /* primaryColumn 뭘로*/
-  @PrimaryColumn()
-  accountType: 'kakao' | 'naver' | 'google';
 
+  @Field(() => String, { defaultValue: true })
+  @Column({ default: 'google' })
+  accountType: 'kakao' | 'naver' | 'google'; //DB 따라서 설정
+
+  @Field(() => String)
   @Column()
   pw: string;
 
+  @Field(() => String)
   @Column()
   nickName: string;
 
+  @Field(() => String)
   @Column()
   email: string;
 
+  @Field(() => String)
   @Column()
   gender: string;
 
+  @Field(() => Int)
   @Column()
-  age: string;
+  age: number;
 
-  @Column()
-  emotional_calendar: [any];
+  @Field(() => String)
+
+  @Field(() => [EmotionCalendar])
+  @OneToMany(() => EmotionCalendar, emotionCalendar => emotionCalendar.user)
+  emotionCalendar: EmotionCalendar[];
+  //refreshToken: string;
 }

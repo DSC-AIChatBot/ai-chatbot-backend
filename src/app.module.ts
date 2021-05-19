@@ -6,13 +6,14 @@ import { AuthModule } from './models/auth/auth.module';
 import { EmotionCalendarModule } from './models/emotion-calendar/emotion-calendar.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppConfigModule } from './config/app/configuration.module';
-import { MongooseModule } from '@nestjs/mongoose'
-
+import { MongooseModule } from '@nestjs/mongoose';
+import { GraphQLModule } from '@nestjs/graphql';
 @Module({
   imports: [
     AppConfigModule,
     AuthModule,
     EmotionCalendarModule,
+    GraphQLModule.forRoot({}),
     ConfigModule.forRoot({
       envFilePath: '.env.dev',
       isGlobal: true,
@@ -24,4 +25,4 @@ import { MongooseModule } from '@nestjs/mongoose'
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

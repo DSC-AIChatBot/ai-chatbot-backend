@@ -27,4 +27,4 @@ import { GCPMysqlConfigModule } from 'src/config/database/mysql-dev/configuratio
     } as TypeOrmModuleAsyncOptions),
   ],
 })
-export class GCPMysqlDatabaseProviderModule {}
+export class GCPMysqlDatabaseProviderModule { }
