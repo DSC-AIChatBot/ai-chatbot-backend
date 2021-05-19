@@ -13,9 +13,6 @@ async function bootstrap() {
    * 1. http://localhost:3000, 개발 환경 react 서버 url
    * 2.
    */
-<<<<<<< HEAD
-  const whitelist = ['http://localhost:3000','http://localhost:5000'];
-=======
   // const whitelist = ['http://localhost:3000','http://localhost:5000'];
 
   // /**
@@ -23,7 +20,6 @@ async function bootstrap() {
   //  * 개발 환경 whitelist cors polcy 를 허용한다.
   //  */
   // const whitelist = ['http://localhost:3000'];
->>>>>>> 4d04e4d13c40b8d70edf88924762a1e0ef1ee237
 
   /**
    * cors error handler
@@ -42,10 +38,7 @@ async function bootstrap() {
   //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   //   credentials: true,
   // });
-<<<<<<< HEAD
   app.enableCors();
-=======
->>>>>>> 4d04e4d13c40b8d70edf88924762a1e0ef1ee237
 
   await app.listen(appConfig.port);
 }

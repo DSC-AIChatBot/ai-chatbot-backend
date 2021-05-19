@@ -1,4 +1,4 @@
-import { Injectable, HttpService,ConflictException } from '@nestjs/common';
+import { Injectable, HttpService,ConflictException,NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SimpleConsoleLogger } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
@@ -18,7 +18,7 @@ export class AuthService {
 
   googleLogin(req: any) {
     if (!req.user) {
-      return 'No user from google';
+      return new NotFoundException('No user from google');
     }    
     if (this.mongoservice.find<User>({id : `${req.user.id}`},this.userModel)){
       return new ConflictException("");
@@ -27,23 +27,33 @@ export class AuthService {
     return this.mongoservice.create<User>(req.user,this.userModel)
   }
 
-  naverLogin(req) {
+  naverLogin(req):Promise<User>|NotFoundException {
     if (!req.user) {
-      return 'No user from naver';
+      return new NotFoundException('No user from naver');
     }
-    const alreadyuser = this.mongoservice.find<User>({id : `${req.user.id}`},this.userModel)
+    const alreadyuser = this.mongoservice.findOne<User>({id : `${req.user.id}`},this.userModel)
     
-    alreadyuser
+    return alreadyuser
       .then(data => {
-        if (data.length!=0){
+        if (data){
           console.log(data)
-          return data[0];
+          return data;
         }
         else{
           console.log("create!!")
           return this.mongoservice.create<User>(req.user,this.userModel)
         }
       })
+  }
+  
+  kakaoLogin(req){
+    if(!req.user){
+      return 'no user from kakao';
+    }
+    return {
+      message : "Success, User info from kakao",
+      user : req.user,
+    }
   }
 
   naverCheck(req) {
