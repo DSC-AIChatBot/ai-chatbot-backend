@@ -45,6 +45,16 @@ export class AuthService {
         }
       })
   }
+  
+  kakaoLogin(req){
+    if(!req.user){
+      return 'no user from kakao';
+    }
+    return {
+      message : "Success, User info from kakao",
+      user : req.user,
+    }
+  }
 
   naverCheck(req) {
     return this.mongoservice.findAll<User>(this.userModel)
