@@ -48,7 +48,7 @@ export class AuthService {
   
   kakaoLogin(req){
     if(!req.user){
-      return 'no user from kakao';
+      return new NotFoundException('No user from kakao');
     }
     return {
       message : "Success, User info from kakao",
