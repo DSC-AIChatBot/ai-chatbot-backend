@@ -1,6 +1,4 @@
 import { HttpModule, Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from 'src/models/auth/auth.module';
 import { MongoService } from './mongo.service';
 
 @Module({
@@ -12,6 +10,3 @@ import { MongoService } from './mongo.service';
 })
 
 export class MongoModule{}
-
-
-
