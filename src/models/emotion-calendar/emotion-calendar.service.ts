@@ -16,7 +16,7 @@ export class EmotionCalendarService {
     return this.mongoservice.findAll<Emotion>(this.emotionModel)
   }
   emotionCreate(req): Promise<Emotion> {
-    const newDb= {createdAt:'2020-06-20',emotion:["good","bad"]}
-    return this.mongoservice.create<Emotion>(newDb,this.emotionModel)
+    const newEmotion : Emotion = {createdAt:"adsf", emotion:"3"}
+    return this.mongoservice.create<Emotion>(newEmotion, this.emotionModel);
   }
 }

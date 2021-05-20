@@ -3,12 +3,11 @@ import { Document } from 'mongoose';
 
 
 export const EmotionSchema = new mongoose.Schema({
-  createdAt: { type: Date, required: true },
-  emotion : { type: [String], required: true },
-  // emotion_calendar : [Object]
+  createdAt: { type: String, required: true },
+  emotion : { type: String, required: true },
+  
 });
 export interface Emotion extends Document{
-  readonly createdAt: Date,
-  readonly emotion: [String],
-  // readonly emotion_calendar: [any]
+  readonly createdAt: String,
+  readonly emotion: String,
 };
