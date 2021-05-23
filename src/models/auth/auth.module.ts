@@ -5,7 +5,7 @@ import { NaverStartegy } from './passport/naver.strategy';
 import { GoogleStrategy } from './passport/google.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './entities/auth.model';
-import { MongoModule } from '../../providers/database/mongo/mongo.module'
+import { MongoModule } from '../../providers/database/mongo/mongo.module';
 import { Kakaostrategy } from './passport/kakao.starategy';
 
 @Module({
@@ -13,7 +13,7 @@ import { Kakaostrategy } from './passport/kakao.starategy';
     // TypeOrmModule.forFeature([UserEntity]),
     HttpModule,
     MongoModule,
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema}])
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy, NaverStartegy, Kakaostrategy],
