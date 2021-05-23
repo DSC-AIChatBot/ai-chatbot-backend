@@ -6,7 +6,7 @@ import { GoogleStrategy } from './passport/google.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './entities/auth.model';
 import { MongoModule } from '../../providers/database/mongo/mongo.module';
-import { Kakaostrategy } from './passport/kakao.starategy';
+import { Kakaostrategy } from './passport/kakao.strategy';
 
 @Module({
   imports: [
