@@ -16,13 +16,13 @@ export class NaverStartegy extends PassportStrategy(Strategy, 'naver'){
     }
 
     async validate (
-        accessToken: string, 
-        refreshToken:string, 
+        accessToken: string,
+        refreshToken:string,
         profile:Profile, 
         done:(error: any, user?: any, info?: any) => void
     ):Promise<any>{
         const _profile = profile._json;
-        console.log(_profile)
+        console.log(_profile);
         const user = {
             id : _profile.id,
             pw : " ",

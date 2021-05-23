@@ -18,6 +18,16 @@ export class AuthController {
     return this.authService.googleLogin(req);
   }
 
+  @Get('login/kakao')
+  @UseGuards(AuthGuard('kakao'))
+  async kakaoAuth(@Req() req) {}
+
+  @Get('login/kakao/callback')
+  @UseGuards(AuthGuard('kakao'))
+  kakaoLoginCallback(@Req() req) {
+    return this.authService.kakaoLogin(req)
+  }
+
   @Get('login/naver')
   @UseGuards(AuthGuard('naver'))
   async naverAuth(@Req() req) {}
