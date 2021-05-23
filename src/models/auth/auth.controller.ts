@@ -1,10 +1,12 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+import { MongoService } from '../../providers/database/mongo/mongo.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService) {}
 
   @Get('login/google')
   @UseGuards(AuthGuard('google'))
@@ -25,4 +27,10 @@ export class AuthController {
   naverauthredirect(@Req() req) {
     return this.authService.naverLogin(req);
   }
+
+  @Get('login/naver/check')
+  navercheck(@Req() req){
+    return this.authService.naverCheck(req);
+  }
+
 }
