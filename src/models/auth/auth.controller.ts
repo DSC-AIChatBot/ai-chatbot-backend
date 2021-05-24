@@ -1,5 +1,6 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/common/guards/jwtGuard.guard';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -45,5 +46,17 @@ export class AuthController {
   @Get('login/naver/check')
   navercheck(@Req() req) {
     return this.authService.naverCheck(req);
+  }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  async profile(@Req() req) {
+    console.log('In Auth Controller ', req.user);
+    return null;
+  }
+
+  @Get('test-token')
+  async testToken(@Req() req) {
+    return this.authService.makeTestToken();
   }
 }

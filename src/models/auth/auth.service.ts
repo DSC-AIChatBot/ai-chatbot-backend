@@ -12,6 +12,7 @@ import { Model, FilterQuery } from 'mongoose';
 import { User } from './entities/auth.model';
 import { LoginUserDTO } from './dto/login.dto';
 import { MongoService } from '../../providers/database/mongo/mongo.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     @InjectModel('User') private readonly userModel: Model<User>,
     private readonly http: HttpService, // @InjectRepository(UserEntity) // private readonly userRepository: Repository<UserEntity>,
     private readonly mongoservice: MongoService,
+    private readonly jwtService: JwtService,
   ) {}
 
   googleLogin(req: any) {
@@ -71,21 +73,15 @@ export class AuthService {
   dupliCheck(user: User) {
     return true;
   }
-  //아래는 몽고 db 관련 메소드라 추후에 모듈화 할 것이다
-  // async findOne(userFilterQuery:FilterQuery<User>):Promise<User>{
-  //   return this.userModel.findOne(userFilterQuery);
-  // }
 
-  // async find(usersFilterQuery:FilterQuery<User>):Promise<User[]>{
-  //   return this.userModel.find(usersFilterQuery);
-  // }
+  async getProfile(req: any) {
+    console.log('In Auth getProfile', req);
+    return null;
+  }
 
-  // async create(user:User): Promise<User> {
-  //   const newUser = new this.userModel(user);
-  //   return newUser.save()
-  // }
-
-  // async findOneAndUpdate(userFilterQuery: FilterQuery<User>, user: Partial<User>): Promise<User>{
-  //   return this.userModel.findOneAndUpdate(userFilterQuery, user);
-  // }
+  async makeTestToken() {
+    return this.jwtService.sign({
+      id: 'testToken',
+    });
+  }
 }
