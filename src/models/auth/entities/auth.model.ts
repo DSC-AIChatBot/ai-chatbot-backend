@@ -6,8 +6,8 @@ export const UserSchema = new mongoose.Schema({
   pw: { type: String, required: true },
   nickName: { type: String, required: true },
   email: { type: String, required: true },
-  gender: { type: String, required: true },
-  age: { type: String, required: true },
+  gender: { type: String, required: false },
+  age: { type: String, required: false },
   accountType: { type: String, required: true },
   // emotion_calendar : [Object]
 });

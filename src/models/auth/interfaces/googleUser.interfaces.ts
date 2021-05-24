@@ -1,17 +1,10 @@
 export interface GoogleUserProfile {
-  user: {
-    id: string;
-    name: string | null;
-    email: string;
-    photo: string | null;
-    familyName: string | null;
-    givenName: string | null;
-  };
-  scopes?: string[];
-  idToken: string | null;
-  /**
-   * Not null only if a valid webClientId and offlineAccess: true was
-   * specified in configure().
-   */
-  serverAuthCode: string | null;
+  sub: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+  email: string;
+  email_verified: boolean;
+  locale: string;
 }

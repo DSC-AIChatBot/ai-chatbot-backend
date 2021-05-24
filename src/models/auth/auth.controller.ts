@@ -2,6 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/common/guards/jwtGuard.guard';
 import { AuthService } from './auth.service';
+import { SocialLoginReq } from './dto/socialLoginReq.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +16,7 @@ export class AuthController {
 
   @Get('login/google/callback')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: any) {
+  googleAuthRedirect(@Req() req: SocialLoginReq) {
     return this.authService.googleLogin(req);
   }
 
@@ -27,7 +28,7 @@ export class AuthController {
 
   @Get('login/kakao/callback')
   @UseGuards(AuthGuard('kakao'))
-  kakaoLoginCallback(@Req() req) {
+  kakaoLoginCallback(@Req() req: SocialLoginReq) {
     return this.authService.kakaoLogin(req);
   }
 
@@ -39,13 +40,8 @@ export class AuthController {
 
   @Get('login/naver/callback')
   @UseGuards(AuthGuard('naver'))
-  naverauthredirect(@Req() req) {
+  naverauthredirect(@Req() req: SocialLoginReq) {
     return this.authService.naverLogin(req);
-  }
-
-  @Get('login/naver/check')
-  navercheck(@Req() req) {
-    return this.authService.naverCheck(req);
   }
 
   @Get('profile')
