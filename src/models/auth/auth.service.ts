@@ -5,6 +5,7 @@ import { User } from './entities/auth.model';
 import { MongoService } from '../../providers/database/mongo/mongo.service';
 import { JwtService } from '@nestjs/jwt';
 import { SocialLoginReq } from './dto/socialLoginReq.dto';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -76,14 +77,16 @@ export class AuthService {
   }
 
   async getProfile(req: any) {
-    const { id, accountType } = req;
+    const { id, accountType } = req.user;
 
     return this.mongoservice.findOne<User>({ id, accountType }, this.userModel);
   }
 
-  async makeTestToken() {
-    return this.jwtService.sign({
-      id: 'testToken',
+  async signSocialJwtToken(req: Request, res: Response) {
+    const accessToken = await this.jwtService.sign({
+      ...req.user,
     });
+
+    return res.cookie('accesstoken', accessToken);
   }
 }

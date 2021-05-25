@@ -17,7 +17,7 @@ import { JwtStrategy } from './passport/jwt.strategy';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.register({
       secret: 'dsc-ai-chatbot',
-      signOptions: { expiresIn: '30s' },
+      signOptions: { expiresIn: '1day' },
     }),
   ],
   controllers: [AuthController],
