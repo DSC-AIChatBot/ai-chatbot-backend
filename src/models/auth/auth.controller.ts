@@ -1,7 +1,9 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from 'src/common/guard/jwtGuard.guard';
+import { Request, Response } from 'express';
+import { JwtAuthGuard } from 'src/common/guards/jwtGuard.guard';
 import { AuthService } from './auth.service';
+import { SocialLoginReq } from './dto/socialLoginReq.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +17,12 @@ export class AuthController {
 
   @Get('login/google/callback')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: any) {
-    return this.authService.googleLogin(req);
+  async googleAuthRedirect(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    await this.authService.signSocialJwtToken(req, res);
+    res.redirect('http://localhost:3000');
   }
 
   @Get('login/kakao')
@@ -27,8 +33,8 @@ export class AuthController {
 
   @Get('login/kakao/callback')
   @UseGuards(AuthGuard('kakao'))
-  kakaoLoginCallback(@Req() req) {
-    return this.authService.kakaoLogin(req);
+  kakaoLoginCallback(@Res() res: Response) {
+    res.redirect('http://localhost:3000');
   }
 
   @Get('login/naver')
@@ -39,13 +45,14 @@ export class AuthController {
 
   @Get('login/naver/callback')
   @UseGuards(AuthGuard('naver'))
-  naverauthredirect(@Req() req) {
-    return this.authService.naverLogin(req);
+  naverauthredirect(@Res() res) {
+    res.redirect('http://localhost:3000');
   }
 
-  @Get('login/naver/check')
-  navercheck(@Req() req) {
-    return this.authService.naverCheck(req);
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  async profile(@Req() req: Request) {
+    return this.authService.getProfile(req);
   }
 
   @Get('profile')

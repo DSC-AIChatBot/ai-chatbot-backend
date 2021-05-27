@@ -13,10 +13,7 @@ async function bootstrap() {
    * 1. http://localhost:3000, 개발 환경 react 서버 url
    * 2.
    */
-
-  const whitelist = ['http://localhost:3000','http://localhost:5000'];
-
-  // const whitelist = ['http://localhost:3000','http://localhost:5000'];
+  const whitelist = ['http://localhost:3000', 'http://localhost:5000', '*'];
 
   // /**
   //  * cors error handler

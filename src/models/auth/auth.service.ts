@@ -1,17 +1,11 @@
-import {
-  Injectable,
-  HttpService,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, SimpleConsoleLogger } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
+import { Injectable, HttpService, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, FilterQuery } from 'mongoose';
+import { Model } from 'mongoose';
 import { User } from './entities/auth.model';
-import { LoginUserDTO } from './dto/login.dto';
 import { MongoService } from '../../providers/database/mongo/mongo.service';
+import { JwtService } from '@nestjs/jwt';
+import { SocialLoginReq } from './dto/socialLoginReq.dto';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -19,61 +13,80 @@ export class AuthService {
     @InjectModel('User') private readonly userModel: Model<User>,
     private readonly http: HttpService, // @InjectRepository(UserEntity) // private readonly userRepository: Repository<UserEntity>,
     private readonly mongoservice: MongoService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  googleLogin(req: any) {
-    if (!req.user) {
-      return new NotFoundException('No user from google');
-    }
-    if (
-      this.mongoservice.find<User>({ id: `${req.user.id}` }, this.userModel)
-    ) {
-      return new ConflictException('');
-    }
-    console.log(req);
-    return this.mongoservice.create<User>(req.user, this.userModel);
-  }
-
-  naverLogin(req): Promise<User> | NotFoundException {
-    if (!req.user) {
-      return new NotFoundException('No user from naver');
-    }
-    const alreadyuser = this.mongoservice.findOne<User>(
-      { id: `${req.user.id}` },
+  /**
+   * 유저 정보 존재 여부 확인 메소드
+   * @param id 몽고 DB PK
+   * @param accountType 소셜 로그인 type
+   * @returns User Model 값
+   */
+  private async dupleCheck(
+    id: string,
+    accountType: 'KAKAO' | 'GOOGLE' | 'NAVER' | 'LOCAL',
+  ): Promise<User> {
+    const user = this.mongoservice.findOne<User>(
+      { id, accountType },
       this.userModel,
     );
 
-    return alreadyuser.then((data) => {
-      if (data) {
-        console.log(data);
-        return data;
-      } else {
-        console.log('create!!');
-        return this.mongoservice.create<User>(req.user, this.userModel);
-      }
-    });
+    return user;
   }
 
-  kakaoLogin(req) {
+  async googleLogin(req: SocialLoginReq) {
+    if (!req.user) {
+      return new NotFoundException('No user from google');
+    }
+
+    const dbUser = await this.dupleCheck(req.user.id, 'GOOGLE');
+
+    if (dbUser) {
+      return dbUser;
+    } else {
+      return this.mongoservice.create<User>(req.user, this.userModel);
+    }
+  }
+
+  async naverLogin(req: SocialLoginReq): Promise<User | NotFoundException> {
+    if (!req.user) {
+      return new NotFoundException('No user from naver');
+    }
+
+    const dbUser = await this.dupleCheck(req.user.id, 'NAVER');
+
+    if (dbUser) {
+      return dbUser;
+    } else {
+      return this.mongoservice.create<User>(req.user, this.userModel);
+    }
+  }
+
+  async kakaoLogin(req: SocialLoginReq) {
     if (!req.user) {
       return new NotFoundException('No user from kakao');
     }
-    return {
-      message: 'Success, User info from kakao',
-      user: req.user,
-    };
-  }
 
-  naverCheck(req) {
-    return this.mongoservice.findAll<User>(this.userModel);
-  }
+    const dbUser = await this.dupleCheck(req.user.id, 'KAKAO');
 
-  dupliCheck(user: User) {
-    return true;
+    if (dbUser) {
+      return dbUser;
+    } else {
+      return this.mongoservice.create<User>(req.user, this.userModel);
+    }
   }
 
   async getProfile(req: any) {
-    console.log(req);
-    return null;
+    const { id, accountType } = req.user;
+
+    return this.mongoservice.findOne<User>({ id, accountType }, this.userModel);
+  }
+
+  async signSocialJwtToken(req: Request, res: Response) {
+    const accessToken = await this.jwtService.sign({
+      ...req.user,
+    });
+
+    return res.cookie('accesstoken', accessToken);
   }
 }

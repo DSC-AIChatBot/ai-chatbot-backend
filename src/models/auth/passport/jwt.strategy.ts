@@ -1,30 +1,20 @@
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
-const fromAuthCookie = function () {
-  return function (request) {
-    let token = null;
-    if (request && request.cookies) {
-      token = request.cookies['Authorization'];
-    }
-    return token;
-  };
-};
+import { User } from '../entities/auth.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
       ignoreExpiration: false,
-      secretOrKey: 'jwt secret key',
+      secretOrKey: 'dsc-ai-chatbot',
     });
   }
 
-  async validate(payload: any) {
-    console.log('jwt ', payload);
+  async validate(payload: User) {
     return payload;
   }
 }

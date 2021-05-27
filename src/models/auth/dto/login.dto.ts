@@ -1,3 +1,3 @@
-export class LoginUserDTO{
-    readonly id: string;
+export class LoginUserDTO {
+  readonly id: string;
 }
