@@ -22,4 +22,5 @@ import { Kakaostrategy } from './passport/kakao.strategy';
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy, NaverStartegy, Kakaostrategy],
 })
+
 export class AuthModule { }

@@ -1,0 +1,17 @@
+  type Message {
+    id: ID!
+    user: String!
+    content: String!
+  }
+
+  type Query {
+    getMessage: [Message!]
+  }
+
+  type Mutation {
+    postMessage(role: String!, content: String!): ID!
+  }
+
+  type Subscription {
+    messages: [Message!]
+  }

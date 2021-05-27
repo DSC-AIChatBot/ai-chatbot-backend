@@ -10,6 +10,7 @@ import { Repository, SimpleConsoleLogger } from 'typeorm';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, FilterQuery } from 'mongoose';
 import { User } from './entities/auth.model';
+
 import { LoginUserDTO } from './dto/login.dto';
 import { MongoService } from '../../providers/database/mongo/mongo.service';
 @Injectable()
@@ -18,6 +19,7 @@ export class AuthService {
     @InjectModel('User') private readonly userModel: Model<User>,
     private readonly http: HttpService, // @InjectRepository(UserEntity) // private readonly userRepository: Repository<UserEntity>,
     private readonly mongoservice: MongoService,
+
   ) { }
 
   googleLogin(req: any) {

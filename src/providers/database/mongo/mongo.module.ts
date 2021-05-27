@@ -6,4 +6,5 @@ import { MongoService } from './mongo.service';
   providers: [MongoService],
   exports: [MongoService],
 })
+
 export class MongoModule {}
