@@ -7,13 +7,17 @@ import { EmotionCalendarModule } from './models/emotion-calendar/emotion-calenda
 import { ConfigModule } from '@nestjs/config';
 import { AppConfigModule } from './config/app/configuration.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ChatModule } from './models/chat/chat.module';
 import { GraphQLModule } from '@nestjs/graphql';
 @Module({
   imports: [
     AppConfigModule,
     AuthModule,
+    ChatModule,
+      GraphQLModule.forRoot({
+        autoSchemaFile: true,
+      }),
     EmotionCalendarModule,
-    GraphQLModule.forRoot({}),
     ConfigModule.forRoot({
       envFilePath: '.env.dev',
       isGlobal: true,
