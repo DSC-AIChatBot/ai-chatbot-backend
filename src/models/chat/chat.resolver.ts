@@ -2,23 +2,24 @@
 import {  Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { ChatService } from './chat.service';
 import { postMessagesInput } from './dto/input/post-message.input';
-import { Chat } from './models/chat';
-@Resolver(() => Chat)
+import { Id } from './models/id';
+import { Message } from './models/message';
+@Resolver(() => Message)
 export class ChatResolver {
     constructor(private readonly chatService: ChatService) { }
-
-    @Query()
-    getMessage() {
+    
+    @Query(() => [Message])
+    getMessages() {
         return this.chatService.getMessage();
     }
 
-    @Mutation(() => Chat)
-    postMessage(@Args('postMessages') postMessageData : postMessagesInput) {
+    @Mutation(() => Id!)
+    postMessage(@Args('postMessageData') postMessageData: postMessagesInput) {
         return this.chatService.postMessage(postMessageData);
     }
 
-    @Subscription()
-    subscribe() {
-        return this.chatService.subscribe();
+    @Subscription(() => Message)
+    subscribeMessage() {
+        return this.chatService.subscribeMessage();
     }
 }

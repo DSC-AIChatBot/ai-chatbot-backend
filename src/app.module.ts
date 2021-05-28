@@ -15,7 +15,11 @@ import { GraphQLModule } from '@nestjs/graphql';
     AuthModule,
     ChatModule,
       GraphQLModule.forRoot({
+        installSubscriptionHandlers: true,
         autoSchemaFile: true,
+        subscriptions: {
+          keepAlive: 5000,
+        }
       }),
     EmotionCalendarModule,
     ConfigModule.forRoot({

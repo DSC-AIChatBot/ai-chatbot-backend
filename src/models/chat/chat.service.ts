@@ -1,21 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { postMessagesInput } from './dto/input/post-message.input';
-
 @Injectable()
 export class ChatService {
   constructor() { }
 
-  private pubsub = new PubSub();
-  private messages = [];
-  private subscribers = [];
-  private onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
+  public pubsub = new PubSub();
+  public messages = [];
+  public subscribers = [];
+  public onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
 
   public getMessage() {
     return this.messages;
   }
 
-  public postMessage(postMessageData : postMessagesInput) {
+  public postMessage(postMessageData : postMessagesInput) {    
     const id = this.messages.length;
 
     this.messages.push({
@@ -27,7 +26,7 @@ export class ChatService {
     return id;
   }
   
-  public subscribe() {
+  public subscribeMessage() {
     const channel = Math.random().toString(36).slice(2, 15);
 
     this.onMessagesUpdates(() => this.pubsub.publish(channel, { messages: this.messages }));

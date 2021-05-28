@@ -1,9 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Chat {
+export class Id {
     @Field()
-    id : string;
-    content : string;
-    user : string;
+    id : number;
 }
