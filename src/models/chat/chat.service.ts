@@ -5,34 +5,26 @@ import { postMessagesInput } from './dto/input/post-message.input';
 export class ChatService {
   constructor() { }
 
-  public pubsub = new PubSub();
-  public messages = [];
-  public subscribers = [];
-  public onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
+  pubsub = new PubSub();
+  messages = [{ id : 0, role : "guest", content : "hello"}];
+  subscribers = [];
+  onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
 
-  public getMessage() {
+  getMessages() {
     return this.messages;
   }
 
-  public postMessage(postMessageData : postMessagesInput) {    
+  async postMessage(postMessageData : postMessagesInput) {   
     const id = this.messages.length;
 
-    this.messages.push({
-      id,
-      ...postMessageData
-    });
+    this.messages.push({ id , ...postMessageData });
 
-    this.subscribers.forEach((fn) => fn());
-    return id;
+    this.pubsub.publish('messageAdded', { messageAdded : { id, ...postMessageData } });
+    
+    return { ...postMessageData, id };
   }
   
-  public subscribeMessage() {
-    const channel = Math.random().toString(36).slice(2, 15);
-
-    this.onMessagesUpdates(() => this.pubsub.publish(channel, { messages: this.messages }));
-
-    setTimeout(() => this.pubsub.publish(channel, { messages : this.messages }), 0);
-
-    return this.pubsub.asyncIterator(channel);
+  messageAdded() {
+    return this.pubsub.asyncIterator('messageAdded');
   }
 }

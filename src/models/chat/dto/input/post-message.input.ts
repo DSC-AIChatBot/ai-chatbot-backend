@@ -3,7 +3,6 @@ import { Field, InputType } from "@nestjs/graphql";
 export class postMessagesInput {
     @Field()
     role: string;
-
     @Field()
     content: string;
 }
