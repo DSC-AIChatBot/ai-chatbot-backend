@@ -12,6 +12,7 @@ import { Model, FilterQuery } from 'mongoose';
 import { User } from './entities/auth.model';
 import { LoginUserDTO } from './dto/login.dto';
 import { MongoService } from '../../providers/database/mongo/mongo.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     @InjectModel('User') private readonly userModel: Model<User>,
     private readonly http: HttpService, // @InjectRepository(UserEntity) // private readonly userRepository: Repository<UserEntity>,
     private readonly mongoservice: MongoService,
+    private jwtService: JwtService,
   ) {}
 
   googleLogin(req: any) {
@@ -34,22 +36,36 @@ export class AuthService {
     return this.mongoservice.create<User>(req.user, this.userModel);
   }
 
-  naverLogin(req): Promise<User> | NotFoundException {
+  naverLogin(req, res): Promise<User> | NotFoundException {
+    //social 로그인이 되지 않은 경우 : 네이버에 아이디가 없을 때
     if (!req.user) {
       return new NotFoundException('No user from naver');
     }
+
+    //위의 조건을 통과했다면 서비스를 사용할 수 있기에 
+    //토큰을 발급하고 쿠키에 Token을 추가한다
+    const Token = this.getToken(req.user);
+    console.log(Token);
+    res.cookie('Authorization',`${Token}`);
+
+    //몽고db에 유저 정보가 있는지 조회한다 
     const alreadyuser = this.mongoservice.findOne<User>(
       { id: `${req.user.id}` },
       this.userModel,
     );
 
     return alreadyuser.then((data) => {
+      //이미 서비스를 한 번 이용해서 DB에 정보가 있는 경우
       if (data) {
         console.log(data);
         return data;
-      } else {
+      } 
+      //처음 서비스를 사용해서 회원가입 되는 경우
+      else {
         console.log('create!!');
-        return this.mongoservice.create<User>(req.user, this.userModel);
+        this.mongoservice.create<User>(req.user, this.userModel);
+        return data;
+        // return this.mongoservice.create<User>(req.user, this.userModel);
       }
     });
   }
@@ -71,21 +87,10 @@ export class AuthService {
   dupliCheck(user: User) {
     return true;
   }
-  //아래는 몽고 db 관련 메소드라 추후에 모듈화 할 것이다
-  // async findOne(userFilterQuery:FilterQuery<User>):Promise<User>{
-  //   return this.userModel.findOne(userFilterQuery);
-  // }
 
-  // async find(usersFilterQuery:FilterQuery<User>):Promise<User[]>{
-  //   return this.userModel.find(usersFilterQuery);
-  // }
+  getToken(user: User){
+    const payload = { username: user.email , sub: user.id};
+    return this.jwtService.sign(payload);
+  }
 
-  // async create(user:User): Promise<User> {
-  //   const newUser = new this.userModel(user);
-  //   return newUser.save()
-  // }
-
-  // async findOneAndUpdate(userFilterQuery: FilterQuery<User>, user: Partial<User>): Promise<User>{
-  //   return this.userModel.findOneAndUpdate(userFilterQuery, user);
-  // }
 }

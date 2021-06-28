@@ -1,7 +1,6 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards, NotFoundException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -38,12 +37,24 @@ export class AuthController {
 
   @Get('login/naver/callback')
   @UseGuards(AuthGuard('naver'))
-  naverauthredirect(@Req() req) {
-    return this.authService.naverLogin(req);
+  naverauthredirect(@Req() req, @Res() res) {
+    const returndata = this.authService.naverLogin(req,res);
+    return returndata;
   }
 
-  @Get('login/naver/check')
-  navercheck(@Req() req) {
-    return this.authService.naverCheck(req);
+  //db에 잘들어갔는지 check하는 라우터 : DB 전체 조회
+  // @Get('login/naver/check')
+  // navercheck(@Req() req) {
+  //   return this.authService.naverCheck(req);
+  // }
+
+  // 토큰 validation check하는 라우터
+
+  @Post('login/naver/token')
+  @UseGuards(AuthGuard('jwt'))
+  navertokenvalid(@Req() req){
+    return req.user;
   }
+  
+
 }
