@@ -36,58 +36,44 @@ export class ChatService {
 
   async postMessage(postMessageData : postMessagesInput) {
     const { userId, role, content } = postMessageData;
-
-    try {
-      // userId 에 해당하는 유저 조회
-      const user = await this.mongoservice.findOne<User>({ id: `${userId}` }, this.userModel);
-      // 해당 유저 있으면, 해당 유저 id 와 함께 채팅방 개설 ( guestId , messages )
-      if(user) {
-        const inputData: any = {
-          guestId : user.id,
-          messages: [{
-            role,
-            content
-          }],
-          createdAt : new Date().toISOString()
-        };
-
-        await this.mongoservice.create<Chat>(inputData, this.chatModel);
-      }
-    } catch(error) {
-      console.log(error);
-    }
+    // userId 에 해당하는 유저 조회
     // 채팅방 유무 확인
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
-      if(chat) {
-        const inputData: any = {
-          guestId : userId,
-          messages: [{
-            role,
-            content
-          }],
-          createdAt : new Date().toISOString()
-        };
+      
+      if(!chat) {
+          const inputData: any = {
+            guestId : userId,
+            messages: [{
+              role,
+              content
+            }],
+            createdAt : new Date().toISOString()
+          };
+  
+          await this.mongoservice.create<Chat>(inputData, this.chatModel);
+        }
 
         await this.mongoservice.findOneAndUpdate({ guestId : userId }, this.chatModel, {
           $push: {
             messages: inputData
           }
         });
+
+        if(!chat) {
+          const inputData: any = {
+            guestId : userId,
+            messages: [{
+              role,
+              content
+            }],
+            createdAt : new Date().toISOString()
+          };
+  
+          await this.mongoservice.create<Chat>(inputData, this.chatModel);
+        }
       }
       
-      if(!chat) {
-        const inputData: any = {
-          guestId : userId,
-          messages: [{
-            role,
-            content
-          }],
-          createdAt : new Date().toISOString()
-        };
-
-        await this.mongoservice.create<Chat>(inputData, this.chatModel);
-      }
     } catch(error) {
       console.log(error);
     }
