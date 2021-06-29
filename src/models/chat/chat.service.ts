@@ -5,6 +5,9 @@ import { Model } from 'mongoose';
 import { MongoService } from 'src/providers/database/mongo/mongo.service';
 import { postMessagesInput } from './dto/input/post-message.input';
 import { Chat } from './models/chat.model';
+
+
+
 @Injectable()
 export class ChatService {
   constructor(
@@ -25,7 +28,7 @@ export class ChatService {
   
   async getMessages(userId: string) {
     try {
-      const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
+      const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
       // if(chat) {
       //   console.log('getget',userId, chat);
       //   return chat.messages;
@@ -50,25 +53,25 @@ export class ChatService {
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
 
-      if(chat) {
-        const inputData: any = {
-          guestId : userId,
-          messages: [{
-            id : this.arrayKey,
-            role,
-            content
-          }],
-          createdAt : new Date().toISOString()
-        };
+      // if(chat) {
+      //   const inputData: any = {
+      //     guestId : userId,
+      //     messages: [{
+      //       id : this.arrayKey,
+      //       role,
+      //       content
+      //     }],
+      //     createdAt : new Date().toISOString()
+      //   };
+        
+      //   await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
+      //     $push: {
+      //       messages: inputData
+      //     }
+      //   });
+      // }
 
-        await this.mongoservice.findOneAndUpdate({ guestId : userId }, this.chatModel, {
-          $push: {
-            messages: inputData
-          }
-        });
-      }
-
-      if(!chat) {
+      if(true) {
           const inputData: any = {
             guestId : userId,
             messages: [{
