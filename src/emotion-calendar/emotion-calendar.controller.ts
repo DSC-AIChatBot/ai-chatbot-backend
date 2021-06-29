@@ -8,7 +8,7 @@ export class EmotionCalendarController {
 
   @Get('')
   emotionTest(@Req() req){
-    return this.emotionService.emotionTest()
+    return this.emotionService.emotionTest();
   }
   @Post()
   emotionCreateTest(@Req() req){

@@ -16,7 +16,7 @@ export class ChatResolver {
     postMessage(@Args('postMessageData') postMessageData: postMessagesInput) {
         return this.chatService.postMessage(postMessageData);
     }
-
+    
     @Subscription(() => Message)
     messageAdded(@Args('postId',{ type: () => ID! }) postId: number) {
         return this.chatService.messageAdded();
