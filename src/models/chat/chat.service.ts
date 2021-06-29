@@ -17,19 +17,25 @@ export class ChatService {
 
   pubsub = new PubSub();
 
-  messages = [{ id : 0, role : "guest", content : "hello"}];
+  // messages = [{ id : 0, role : "guest", content : "hello"}];
 
   subscribers = [];
   
   onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
   
-  getMessages() {
-    return this.messages;
+  async getMessages(userId: string) {
+    try {
+      const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
+      if(chat) {
+        return chat;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async postMessage(postMessageData : postMessagesInput) {
     const { userId, role, content } = postMessageData;
-    const id = this.messages.length;
 
     try {
       // userId 에 해당하는 유저 조회
@@ -47,14 +53,44 @@ export class ChatService {
 
         await this.mongoservice.create<Chat>(inputData, this.chatModel);
       }
+    } catch(error) {
+      console.log(error);
+    }
+    // 채팅방 유무 확인
+    try {
+      const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
+      if(chat) {
+        const inputData: any = {
+          guestId : userId,
+          messages: [{
+            role,
+            content
+          }],
+          createdAt : new Date().toISOString()
+        };
+
+        await this.mongoservice.findOneAndUpdate({ guestId : userId }, this.chatModel, {
+          $push: {
+            messages: inputData
+          }
+        });
+      }
       
-      if(chat.) {
-        
+      if(!chat) {
+        const inputData: any = {
+          guestId : userId,
+          messages: [{
+            role,
+            content
+          }],
+          createdAt : new Date().toISOString()
+        };
+
+        await this.mongoservice.create<Chat>(inputData, this.chatModel);
       }
     } catch(error) {
       console.log(error);
     }
-    
 
     this.pubsub.publish('messageAdded', { messageAdded : { id, ...postMessageData } });
     
