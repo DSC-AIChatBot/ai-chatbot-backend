@@ -46,12 +46,8 @@
     "mongoose": "^5.12.7",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
-<<<<<<< HEAD
-    "passport-kakao": "^1.0.1",
-=======
     "passport-jwt": "^4.0.0",
     "passport-kakao": "1.0.1",
->>>>>>> 5f7982c9324b5540320af37e7345e1372cac642e
     "passport-local": "^1.0.0",
     "passport-naver": "^1.0.6",
     "reflect-metadata": "^0.1.13",

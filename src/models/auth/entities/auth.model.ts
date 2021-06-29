@@ -10,17 +10,6 @@ export const UserSchema = new mongoose.Schema({
   age: { type: String, required: false },
   accountType: { type: String, required: true },
 });
-<<<<<<< HEAD
-export interface User extends Document{
-    readonly id: string,
-    readonly pw: string,
-    readonly nickName: string,
-    readonly email: string,
-    readonly gender: string,
-    readonly age: String,
-    readonly accountType: string,
-    // readonly emotion_calendar: [any]
-=======
 
 export interface User extends Document {
   readonly id: string;
@@ -30,5 +19,4 @@ export interface User extends Document {
   readonly gender: string;
   readonly age: string;
   readonly accountType: string;
->>>>>>> 5f7982c9324b5540320af37e7345e1372cac642e
 }
