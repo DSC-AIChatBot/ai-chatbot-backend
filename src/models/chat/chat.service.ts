@@ -18,6 +18,8 @@ export class ChatService {
   // messages = [{ id : 0, role : "guest", content : "hello"}];
 
   subscribers = [];
+
+  arrayKey = new Date();
   
   onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
   
@@ -25,7 +27,9 @@ export class ChatService {
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
       if(chat) {
-        return chat;
+        return chat.messages;
+      } else {
+        return [];
       }
     } catch (error) {
       console.log(error);
@@ -43,6 +47,7 @@ export class ChatService {
         const inputData: any = {
           guestId : userId,
           messages: [{
+            id : this.arrayKey,
             role,
             content
           }],
@@ -72,10 +77,9 @@ export class ChatService {
      catch(error) {
       console.log(error);
     }
+    this.pubsub.publish('messageAdded', { messageAdded : { id : this.arrayKey, ...postMessageData } })
     
-    this.pubsub.publish('messageAdded', { messageAdded : { id : new Date(), ...postMessageData } });
-    
-    return { ...postMessageData, id : new Date() };
+    return { ...postMessageData, id : this.arrayKey };
   }
   
   messageAdded() {
