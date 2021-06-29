@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PubSub } from 'graphql-subscriptions';
 import { Model } from 'mongoose';
@@ -36,11 +36,27 @@ export class ChatService {
 
   async postMessage(postMessageData : postMessagesInput) {
     const { userId, role, content } = postMessageData;
-    // userId 에 해당하는 유저 조회
     // 채팅방 유무 확인
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
-      
+
+      if(chat) {
+        const inputData: any = {
+          guestId : userId,
+          messages: [{
+            role,
+            content
+          }],
+          createdAt : new Date().toISOString()
+        };
+
+        await this.mongoservice.findOneAndUpdate({ guestId : userId }, this.chatModel, {
+          $push: {
+            messages: inputData
+          }
+        });
+      }
+
       if(!chat) {
           const inputData: any = {
             guestId : userId,
@@ -53,34 +69,14 @@ export class ChatService {
   
           await this.mongoservice.create<Chat>(inputData, this.chatModel);
         }
-
-        await this.mongoservice.findOneAndUpdate({ guestId : userId }, this.chatModel, {
-          $push: {
-            messages: inputData
-          }
-        });
-
-        if(!chat) {
-          const inputData: any = {
-            guestId : userId,
-            messages: [{
-              role,
-              content
-            }],
-            createdAt : new Date().toISOString()
-          };
-  
-          await this.mongoservice.create<Chat>(inputData, this.chatModel);
-        }
       }
-      
-    } catch(error) {
+     catch(error) {
       console.log(error);
     }
 
-    this.pubsub.publish('messageAdded', { messageAdded : { id, ...postMessageData } });
+    this.pubsub.publish('messageAdded', { messageAdded : { id : new Date(), ...postMessageData } });
     
-    return { ...postMessageData, id };
+    return { ...postMessageData, id : new Date() };
   }
   
   messageAdded() {
