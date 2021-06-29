@@ -34,6 +34,7 @@ export class ChatService {
 
   async postMessage(postMessageData : postMessagesInput) {
     const { userId, role, content } = postMessageData;
+    
     // 채팅방 유무 확인
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
@@ -71,7 +72,7 @@ export class ChatService {
      catch(error) {
       console.log(error);
     }
-
+    
     this.pubsub.publish('messageAdded', { messageAdded : { id : new Date(), ...postMessageData } });
     
     return { ...postMessageData, id : new Date() };
