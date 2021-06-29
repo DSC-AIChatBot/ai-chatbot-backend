@@ -26,18 +26,25 @@ export class ChatService {
   async getMessages(userId: string) {
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
-      if(chat) {
-        return chat.messages;
-      } else {
-        return [];
-      }
+      // if(chat) {
+      //   console.log('getget',userId, chat);
+      //   return chat.messages;
+      // } else {
+      //   return [];
+      // }
+
+      console.log('getget', userId, chat);
+
+      return chat.messages;
     } catch (error) {
-      console.log(error);
+      console.log('err',error);
     }
   }
 
   async postMessage(postMessageData : postMessagesInput) {
     const { userId, role, content } = postMessageData;
+
+    console.log('post message data',postMessageData);
     
     // 채팅방 유무 확인
     try {
@@ -77,9 +84,17 @@ export class ChatService {
      catch(error) {
       console.log(error);
     }
-    this.pubsub.publish('messageAdded', { messageAdded : { id : this.arrayKey, ...postMessageData } })
+    this.pubsub.publish('messageAdded', { messageAdded : { id : this.arrayKey, ...postMessageData } });
     
-    return { ...postMessageData, id : this.arrayKey };
+
+    const responsePostMessage = {... postMessageData, role: 'chatbot'};
+    const returnData = {
+      ...responsePostMessage, id : this.arrayKey 
+    };
+    // return { ...postMessageData, id : this.arrayKey };
+
+    console.log('return data',returnData);
+    return returnData;
   }
   
   messageAdded() {
