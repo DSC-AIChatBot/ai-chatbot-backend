@@ -6,7 +6,7 @@ import { Message } from './models/message';
 @Resolver(() => Message)
 export class ChatResolver {
     constructor(private readonly chatService: ChatService) { }
-    
+
     @Query(() => [Message])
     getMessages(@Args('userId',{ type: () => String! }) userId: string) {
         return this.chatService.getMessages(userId);
