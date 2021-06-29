@@ -3,6 +3,8 @@ import {  Args, ID, Mutation, Query, Resolver, Subscription } from '@nestjs/grap
 import { ChatService } from './chat.service';
 import { postMessagesInput } from './dto/input/post-message.input';
 import { Message } from './models/message';
+import { GqlAuthGuard } from "../../common/guards/graphql.auth.guard";
+
 @Resolver(() => Message)
 export class ChatResolver {
     constructor(private readonly chatService: ChatService) { }
