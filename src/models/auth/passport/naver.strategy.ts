@@ -30,8 +30,8 @@ export class NaverStartegy extends PassportStrategy(Strategy, 'naver') {
       // 추후에 체크했는데 아직 리프레시 토큰이 살아서
       // 계속 로그인 이후 정보를 제대로 받지 못함
       // 그래서 우선 주석 처리함
-      // email : _profile.email,
-      email: 'jawoon@dsc.com',
+      email: _profile.email,
+      // email: 'jawoon@dsc.com',
       age: _profile.age,
       accountType: 'Naver',
       nickName: ' ',
