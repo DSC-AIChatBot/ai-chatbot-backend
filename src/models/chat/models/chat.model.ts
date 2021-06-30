@@ -14,6 +14,7 @@ export const ChatSchema = new mongoose.Schema({
     }],
     createdAt : { type: String, required: true }
 });
+
 export interface Chat extends Document{
     readonly guestId: string,
     readonly messages: [Message],

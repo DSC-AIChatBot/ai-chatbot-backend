@@ -4,7 +4,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { Model } from 'mongoose';
 import { MongoService } from 'src/providers/database/mongo/mongo.service';
 import { postMessagesInput } from './dto/input/post-message.input';
-import { Chat } from './models/chat.model';
+import { Chat, ChatSchema } from './models/chat.model';
 import { Document } from 'mongoose';
 
 
@@ -27,18 +27,20 @@ export class ChatService {
   onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
   
   async getMessages(userId: string) {
+    console.log('gegegT',userId);
+
     try {
       const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
-      // if(chat) {
-      //   console.log('getget',userId, chat);
-      //   return chat.messages;
-      // } else {
-      //   return [];
-      // }
+      if(chat) {
+        console.log('getget',userId, chat);
+        return chat.messages;
+      } else {
+        return [];
+      }
 
-      console.log('getget', userId, chat);
+      // console.log('getget', userId, chat);
 
-      return chat.messages;
+      // return chat.messages;
     } catch (error) {
       console.log('err',error);
     }
@@ -54,7 +56,7 @@ export class ChatService {
       const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
 
       if(chat) {
-        const inputData = {
+        const inputData:any = {
           guestId : userId,
           messages: [{
             // id : this.arrayKey,
@@ -65,7 +67,7 @@ export class ChatService {
         };
         
         await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
-          $set: {
+          $push: {
             messages: inputData.messages
           }
         });
@@ -80,8 +82,10 @@ export class ChatService {
             }],
             createdAt : new Date().toISOString()
           };
-          
-          await this.mongoservice.create<Chat>(inputData, this.chatModel);
+
+          const inputData_Chat:Chat = new this.chatModel(inputData);
+
+          await this.mongoservice.create<Chat>(inputData_Chat, this.chatModel);
         }
       }
      catch(error) {
@@ -96,7 +100,7 @@ export class ChatService {
     };
     // return { ...postMessageData, id : this.arrayKey };
 
-    console.log('return data',returnData);
+    // console.log('return data',returnData);
     return returnData;
   }
   
