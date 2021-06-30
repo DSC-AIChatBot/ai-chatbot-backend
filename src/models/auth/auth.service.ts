@@ -56,7 +56,7 @@ export class AuthService {
     }
   }
 
-  async naverLogin(req: SocialLoginReq): Promise<User | NotFoundException> {
+  async naverLogin(req: SocialLoginReq) {
     if (!req.user) {
       return new NotFoundException('No user from naver');
     }
@@ -86,8 +86,9 @@ export class AuthService {
 
   async getProfile(req: any) {
     const { id, accountType } = req.user;
-
-    return this.mongoservice.findOne<User>({ id, accountType }, this.userModel);
+    const userData =  await this.mongoservice.findOne<User>({ id, accountType }, this.userModel);
+    
+    return userData;
   }
 
   async signSocialJwtToken(req: Request, res: Response) {
