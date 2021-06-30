@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { MongoService } from 'src/providers/database/mongo/mongo.service';
 import { postMessagesInput } from './dto/input/post-message.input';
 import { Chat } from './models/chat.model';
-
+import { Document } from 'mongoose';
 
 
 @Injectable()
@@ -51,27 +51,27 @@ export class ChatService {
     
     // 채팅방 유무 확인
     try {
-      const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
+      const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
 
-      // if(chat) {
-      //   const inputData: any = {
-      //     guestId : userId,
-      //     messages: [{
-      //       id : this.arrayKey,
-      //       role,
-      //       content
-      //     }],
-      //     createdAt : new Date().toISOString()
-      //   };
+      if(chat) {
+        const inputData = {
+          guestId : userId,
+          messages: [{
+            // id : this.arrayKey,
+            role: role,
+            content: content,
+          }],
+          createdAt : new Date().toISOString()
+        };
         
-      //   await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
-      //     $push: {
-      //       messages: inputData
-      //     }
-      //   });
-      // }
+        await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
+          $set: {
+            messages: inputData.messages
+          }
+        });
+      }
 
-      if(true) {
+      if(!chat) {
           const inputData: any = {
             guestId : userId,
             messages: [{
@@ -80,7 +80,7 @@ export class ChatService {
             }],
             createdAt : new Date().toISOString()
           };
-  
+          
           await this.mongoservice.create<Chat>(inputData, this.chatModel);
         }
       }
