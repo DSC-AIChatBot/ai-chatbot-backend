@@ -6,8 +6,9 @@ import { MongoService } from 'src/providers/database/mongo/mongo.service';
 import { postMessagesInput } from './dto/input/post-message.input';
 import { Chat, ChatSchema } from './models/chat.model';
 import { Document } from 'mongoose';
-
-
+import axios  from 'axios';
+const DATA_URL = 'http://0.0.0.0:4000/message_post';
+//const TEST_DATA_URL = 'http://0.0.0.0:4000/test';
 @Injectable()
 export class ChatService {
   constructor(
@@ -15,7 +16,7 @@ export class ChatService {
     private readonly http: HttpService,
     private readonly mongoservice: MongoService,
   ) { }
-
+  
   pubsub = new PubSub();
 
   // messages = [{ id : 0, role : "guest", content : "hello"}];
@@ -27,7 +28,7 @@ export class ChatService {
   onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
   
   async getMessages(userId: string) {
-    console.log('gegegT',userId);
+    // console.log('gegegT',userId);
 
     try {
       const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
@@ -50,7 +51,14 @@ export class ChatService {
     const { userId, role, content } = postMessageData;
 
     console.log('post message data',postMessageData);
-    
+    const resContent = await axios({
+          url: DATA_URL,
+          method: 'post',
+          params: {
+            message: content,
+          }
+        });
+    // console.log('ㅁㅁ',resContent.data);
     // 채팅방 유무 확인
     try {
       const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
@@ -62,10 +70,13 @@ export class ChatService {
             // id : this.arrayKey,
             role: role,
             content: content,
+          },{
+            // id : this.arrayKey,
+            role: 'guest',
+            content: resContent.data,
           }],
           createdAt : new Date().toISOString()
         };
-        
         await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
           $push: {
             messages: inputData.messages
@@ -79,6 +90,10 @@ export class ChatService {
             messages: [{
               role,
               content
+            },{
+              // id : this.arrayKey,
+              role: 'guest',
+              content: resContent.data,
             }],
             createdAt : new Date().toISOString()
           };
