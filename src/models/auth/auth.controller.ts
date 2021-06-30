@@ -32,13 +32,22 @@ export class AuthController {
 
   @Get('login/kakao')
   @UseGuards(AuthGuard('kakao'))
-  async kakaoAuth(@Req() req) {
+  async kakaoAuth() {
     /* */
   }
 
   @Get('login/kakao/callback')
   @UseGuards(AuthGuard('kakao'))
-  kakaoLoginCallback(@Res() res: Response) {
+  async kakaoLoginCallback( 
+    @Req() req: any, 
+    @Res({ passthrough: true }) res: Response) {
+      const loginUser: SocialLoginReq = {
+        user: req.user as User
+      };
+
+      await this.authService.signSocialJwtToken(req, res);
+      await this.authService.kakaoLogin(loginUser);
+      
     res.redirect('http://localhost:3000');
   }
 
@@ -50,14 +59,17 @@ export class AuthController {
 
   @Get('login/naver/callback')
   @UseGuards(AuthGuard('naver'))
-  naverauthredirect(@Res() res) {
-    res.redirect('http://localhost:3000');
-  }
+  async naverauthredirect(
+    @Req() req: Request, 
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const loginUser: SocialLoginReq = {
+      user: req.user as User
+    }; 
+    await this.authService.signSocialJwtToken(req, res);
+    await this.authService.naverLogin(loginUser);
 
-  @Get('profile')
-  @UseGuards(JwtAuthGuard)
-  async profile(@Req() req: Request) {
-    return this.authService.getProfile(req);
+    res.redirect('http://localhost:3000');
   }
 
   @Get('profile')

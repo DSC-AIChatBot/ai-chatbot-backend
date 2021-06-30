@@ -19,9 +19,18 @@ export class Kakaostrategy extends PassportStrategy(Strategy, 'kakao') {
     profile: Profile,
     done: (error: any, user?: any, info?: any) => void,
   ): Promise<any> {
-    console.log(profile);
     const _profile = profile._json;
-    const user = { id: _profile.id };
+
+    const user = {
+      id: _profile.id,      
+      pw: ' ',
+      email: _profile.kakao_account.email,
+      accountType: 'KAKAO',
+      nickName: _profile.properties.nickname,
+
+      gender: _profile.kakao_account.gender,
+      age: '',
+    };
 
     done(null, user);
   }
