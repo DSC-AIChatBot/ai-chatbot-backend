@@ -38,7 +38,14 @@ export class AuthController {
 
   @Get('login/kakao/callback')
   @UseGuards(AuthGuard('kakao'))
-  kakaoLoginCallback(@Res() res: Response) {
+  async kakaoLoginCallback( 
+    @Req() req: any, 
+    @Res({ passthrough: true }) res: Response) {
+      const loginUser: SocialLoginReq = {
+        user: req.user as User
+      };
+      await this.authService.signSocialJwtToken(req, res);
+      await this.authService.kakaoLogin(loginUser);
     res.redirect('http://localhost:3000');
   }
 
