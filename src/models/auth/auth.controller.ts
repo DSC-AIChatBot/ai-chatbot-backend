@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { JwtAuthGuard } from 'src/common/guards/jwtGuard.guard';
 import { AuthService } from './auth.service';
 import { SocialLoginReq } from './dto/socialLoginReq.dto';
+import { User } from './entities/auth.model';
 
 @Controller('auth')
 export class AuthController {
@@ -18,10 +19,14 @@ export class AuthController {
   @Get('login/google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(
-    @Req() req: Request,
+    @Req() req: any,
     @Res({ passthrough: true }) res: Response,
   ) {
+    const loginUser: SocialLoginReq = {
+      user: req.user as User
+    };
     await this.authService.signSocialJwtToken(req, res);
+    await this.authService.googleLogin(loginUser);
     res.redirect('http://localhost:3000');
   }
 

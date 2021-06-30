@@ -27,6 +27,8 @@ export class ChatService {
   onMessagesUpdates = (fn : Function) => this.subscribers.push(fn);
   
   async getMessages(userId: string) {
+    console.log('gegegT',userId);
+
     try {
       const chat = await this.mongoservice.findOne<Chat>({ guestId : userId }, this.chatModel);
       // if(chat) {
@@ -36,7 +38,7 @@ export class ChatService {
       //   return [];
       // }
 
-      console.log('getget', userId, chat);
+      // console.log('getget', userId, chat);
 
       return chat.messages;
     } catch (error) {
@@ -53,25 +55,25 @@ export class ChatService {
     try {
       const chat = await this.mongoservice.findOne({ guestId : userId }, this.chatModel);
 
-      // if(chat) {
-      //   const inputData: any = {
-      //     guestId : userId,
-      //     messages: [{
-      //       id : this.arrayKey,
-      //       role,
-      //       content
-      //     }],
-      //     createdAt : new Date().toISOString()
-      //   };
+      if(chat) {
+        const inputData: any = {
+          guestId : userId,
+          messages: [{
+            id : this.arrayKey,
+            role,
+            content
+          }],
+          createdAt : new Date().toISOString()
+        };
         
-      //   await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
-      //     $push: {
-      //       messages: inputData
-      //     }
-      //   });
-      // }
+        await this.mongoservice.findOneAndUpdate<Chat>({ guestId : userId }, this.chatModel, {
+          $push: {
+            messages: inputData
+          }
+        });
+      }
 
-      if(true) {
+      if(!chat) {
           const inputData: any = {
             guestId : userId,
             messages: [{
@@ -96,7 +98,7 @@ export class ChatService {
     };
     // return { ...postMessageData, id : this.arrayKey };
 
-    console.log('return data',returnData);
+    // console.log('return data',returnData);
     return returnData;
   }
   
